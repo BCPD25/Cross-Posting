@@ -29,10 +29,7 @@
                         facebook: {
                             blue: '#1877f2',
                             hover: '#166fe5'
-                        },
-                        bcsky: '#0284c7',
-                        bcroyal: '#1d4ed8',
-                        bcgold: '#fbbf24'
+                        }
                     }
                 }
             }
@@ -41,94 +38,78 @@
 </head>
 <body class="h-full bg-slate-900 text-slate-100 font-sans antialiased flex flex-col relative overflow-hidden">
 
-    <!-- ========================================== -->
-    <!-- MANDATORY FACEBOOK LOGIN OVERLAY MODAL     -->
-    <!-- ========================================== -->
-    <div id="facebook-login-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-6 text-center relative overflow-hidden">
-            <!-- Decorative Top Gradient Bar -->
-            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-bcsky via-facebook-blue to-bcroyal"></div>
-
-            <div class="w-16 h-16 rounded-2xl bg-facebook-blue/10 text-facebook-blue flex items-center justify-center mx-auto text-3xl shadow-inner border border-facebook-blue/20">
-                <i class="fa-brands fa-facebook"></i>
+    <!-- MANDATORY FACEBOOK LOGIN GATEWAY MODAL (Initially Open until Authenticated) -->
+    <div id="facebook-login-gateway" class="absolute inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-6 text-center animate-in fade-in zoom-in duration-300">
+            <!-- Brand Crest -->
+            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-green-600 via-emerald-500 to-sky-600 flex items-center justify-center mx-auto shadow-xl text-white text-3xl ring-4 ring-emerald-500/20">
+                <i class="fa-solid fa-drum"></i>
+            </div>
+            
+            <div>
+                <h2 class="text-xl font-bold text-white">Bomber County Pipes & Drums</h2>
+                <p class="text-xs text-slate-400 mt-1">Facebook Cross-Poster Authorisation Gateway</p>
             </div>
 
-            <div class="space-y-2">
-                <h2 class="text-xl font-bold text-white">Facebook Graph API Authorisation</h2>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Bomber County Pipes & Drums cross-poster requires administrative access to Gary Sansby's Facebook profile to publish updates across all joined community groups.
-                </p>
-            </div>
-
-            <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80 text-left space-y-3">
+            <!-- Meta / Facebook Login Card -->
+            <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 text-left space-y-3">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-bcsky/20 text-bcsky flex items-center justify-center font-bold text-sm">
+                    <div class="w-12 h-12 rounded-full bg-facebook-blue flex items-center justify-center text-white font-bold text-base shrink-0 shadow-md">
                         GS
                     </div>
-                    <div>
-                        <p class="text-xs font-bold text-white">Gary Sansby</p>
-                        <p class="text-[10px] text-slate-400">Target Account &bull; Admin for 27+ Groups</p>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-bold text-white truncate">Gary Sansby</p>
+                        <p class="text-xs text-emerald-400 truncate">garysans86@gmail.com</p>
                     </div>
                 </div>
-                <div class="pt-2 border-t border-slate-700/60 text-[11px] text-slate-300 space-y-1.5">
-                    <div class="flex items-center space-x-2 text-emerald-400">
-                        <i class="fa-solid fa-check text-[10px]"></i>
-                        <span><code>pages_manage_posts</code> (Bomber County PD Page)</span>
-                    </div>
-                    <div class="flex items-center space-x-2 text-emerald-400">
-                        <i class="fa-solid fa-check text-[10px]"></i>
-                        <span><code>groups_access_member_info</code> &amp; <code>publish_to_groups</code></span>
-                    </div>
-                    <div class="flex items-center space-x-2 text-emerald-400">
-                        <i class="fa-solid fa-check text-[10px]"></i>
-                        <span><code>pages_read_engagement</code></span>
-                    </div>
+                <div class="pt-2 border-t border-slate-700/80 text-[11px] text-slate-300 space-y-1">
+                    <p class="font-medium text-slate-200">Required Permissions:</p>
+                    <ul class="list-disc list-inside space-y-0.5 text-slate-400">
+                        <li>Manage posts on Bomber County Page</li>
+                        <li>Access all groups joined by Gary Sansby (27+ groups)</li>
+                        <li>Publish content simultaneously to selected groups</li>
+                    </ul>
                 </div>
             </div>
 
-            <button onclick="performFacebookLogin()" class="w-full bg-facebook-blue hover:bg-facebook-hover text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-blue-900/40 transition flex items-center justify-center space-x-3 text-sm">
-                <i class="fa-brands fa-facebook text-lg"></i>
-                <span>Continue with Facebook</span>
-            </button>
-
-            <p class="text-[10px] text-slate-500">
-                Secure OAuth 2.0 connection. Bomber County Pipes & Drums respects your privacy and UK data protection regulations.
-            </p>
+            <!-- Login Action Buttons -->
+            <div class="space-y-3">
+                <button onclick="authenticateGarySansby()" class="w-full bg-facebook-blue hover:bg-facebook-hover text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-blue-900/40 transition flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-brands fa-facebook text-lg"></i>
+                    <span>Continue as Gary Sansby</span>
+                </button>
+                <p class="text-[10px] text-slate-500">
+                    By continuing, you securely authorise Graph API v18.0 token generation for automated UK regional syndication.
+                </p>
+            </div>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MAIN APPLICATION CONTAINER                 -->
-    <!-- ========================================== -->
     <!-- Top Navigation Bar -->
-    <header class="bg-slate-800 border-b border-slate-700 px-4 lg:px-8 py-3 flex items-center justify-between shrink-0 shadow-md z-20">
+    <header class="bg-slate-800 border-b border-slate-700 px-4 lg:px-8 py-3 flex items-center justify-between shrink-0 shadow-md">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-bcsky to-bcroyal flex items-center justify-center shadow-inner text-white font-bold text-lg">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-green-600 to-emerald-500 flex items-center justify-center shadow-inner text-white font-bold text-lg">
                 <i class="fa-solid fa-drum"></i>
             </div>
             <div>
                 <h1 class="font-bold text-base lg:text-lg tracking-tight text-white flex items-center gap-2">
                     Bomber County Pipes & Drums 
-                    <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">UK Official</span>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">UK English</span>
                 </h1>
-                <p class="text-xs text-slate-400">Facebook Cross-Poster &bull; Gary Sansby Account Manager</p>
+                <p class="text-xs text-slate-400">Facebook Cross-Poster &bull; Gary Sansby Authorised Account</p>
             </div>
         </div>
 
-        <div class="flex items-center space-x-3">
-            <!-- Logged-in Profile Badge -->
-            <div class="flex items-center space-x-3 bg-slate-900/80 px-3 py-1.5 rounded-2xl border border-slate-700">
-                <div class="w-7 h-7 rounded-full bg-bcsky text-white font-bold text-xs flex items-center justify-center">
-                    GS
-                </div>
-                <div class="hidden sm:block text-left">
-                    <p class="text-xs font-bold text-white leading-none">Gary Sansby</p>
-                    <p class="text-[10px] text-emerald-400 mt-0.5">Connected (@bcpd.org.uk)</p>
-                </div>
-                <button onclick="triggerLogout()" title="Disconnect Facebook Session" class="ml-2 text-slate-400 hover:text-red-400 transition text-xs pl-2 border-l border-slate-700">
-                    <i class="fa-solid fa-power-off"></i>
-                </button>
+        <div class="flex items-center space-x-4">
+            <!-- Global Auth Badge -->
+            <div id="auth-status-badge" class="flex items-center space-x-2 bg-slate-700/60 px-3 py-1.5 rounded-full text-xs border border-slate-600">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-slate-300 font-medium">Gary Sansby Connected</span>
             </div>
+            <button onclick="openModal('settings-modal')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3.5 py-2 rounded-xl text-xs font-medium transition flex items-center space-x-2 border border-slate-600">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                <span class="hidden md:inline">Account Authorisation</span>
+            </button>
         </div>
     </header>
 
@@ -137,7 +118,7 @@
         <!-- Sidebar Navigation -->
         <nav class="w-16 lg:w-64 bg-slate-800/80 border-r border-slate-700 flex flex-col shrink-0 transition-all duration-300">
             <div class="p-3 lg:p-4 space-y-1.5 flex-1">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition bg-bcsky text-white shadow-lg shadow-sky-900/30">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition bg-emerald-600 text-white shadow-lg shadow-emerald-900/30">
                     <i class="fa-solid fa-chart-line w-5 text-center text-base"></i>
                     <span class="hidden lg:inline">Live Dashboard</span>
                 </button>
@@ -147,7 +128,7 @@
                 </button>
                 <button onclick="switchTab('groups')" id="nav-groups" class="w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-slate-700/60 hover:text-white">
                     <i class="fa-solid fa-users-rectangle w-5 text-center text-base"></i>
-                    <span class="hidden lg:inline">Connected Groups</span>
+                    <span class="hidden lg:inline">Gary's Group Catalogue</span>
                     <span id="sidebar-group-count" class="ml-auto hidden lg:inline bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full">27</span>
                 </button>
                 <button onclick="switchTab('logs')" id="nav-logs" class="w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-slate-700/60 hover:text-white">
@@ -163,7 +144,7 @@
                         <i class="fa-brands fa-facebook text-facebook-blue text-lg"></i>
                         <div class="hidden lg:block truncate">
                             <p class="text-xs font-semibold text-white leading-tight">Gary Sansby</p>
-                            <p class="text-[10px] text-emerald-400">API Session Active</p>
+                            <p class="text-[10px] text-emerald-400">garysans86@gmail.com</p>
                         </div>
                     </div>
                     <div class="hidden lg:block text-[11px] text-slate-400 space-y-1">
@@ -172,8 +153,8 @@
                             <span class="text-slate-200 font-medium">Bomber County PD</span>
                         </div>
                         <div class="flex justify-between">
-                            <span>Groups:</span>
-                            <span class="text-emerald-400 font-medium">27 Authorised</span>
+                            <span>Groups Joined:</span>
+                            <span class="text-emerald-400 font-medium">27 Active</span>
                         </div>
                     </div>
                 </div>
@@ -188,25 +169,25 @@
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-slate-800 to-slate-800/90 border border-slate-700 rounded-2xl p-6 shadow-xl relative overflow-hidden">
                     <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-no-repeat bg-right opacity-10 pointer-events-none flex items-center justify-end pr-8">
-                        <i class="fa-solid fa-shield-cat text-9xl text-bcsky"></i>
+                        <i class="fa-solid fa-shield-cat text-9xl text-emerald-500"></i>
                     </div>
                     <div class="max-w-2xl relative z-10">
-                        <div class="inline-flex items-center space-x-2 bg-bcsky/10 text-bcsky px-3 py-1 rounded-full text-xs font-medium mb-3 border border-bcsky/20">
-                            <i class="fa-solid fa-shield-halved"></i>
-                            <span>Gary Sansby Authorisation Active &bull; UK English Mode</span>
+                        <div class="inline-flex items-center space-x-2 bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-xs font-medium mb-3 border border-emerald-500/20">
+                            <i class="fa-solid fa-check-circle"></i>
+                            <span>Authorised &bull; Gary Sansby (garysans86@gmail.com)</span>
                         </div>
                         <h2 class="text-2xl lg:text-3xl font-bold text-white tracking-tight">Cross-Posting Command Centre</h2>
                         <p class="text-slate-300 text-sm mt-2 leading-relaxed">
-                            Seamlessly syndicate parade updates, Burns Night performances, and piping schedules from the <strong class="text-white">Bomber County Pipes & Drums</strong> Facebook page directly to all <strong class="text-white">27 joined community groups</strong> linked via Gary Sansby's profile.
+                            Syndicate updates, parade schedules, and piping performances from the <strong class="text-white">Bomber County Pipes & Drums</strong> Facebook page directly to all 27+ groups joined by <strong class="text-white">Gary Sansby</strong> across Lincolnshire and the UK.
                         </p>
                         <div class="mt-5 flex flex-wrap gap-3">
-                            <button onclick="switchTab('composer')" class="bg-bcsky hover:bg-sky-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-sky-900/40 transition flex items-center space-x-2">
+                            <button onclick="switchTab('composer')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-emerald-900/40 transition flex items-center space-x-2">
                                 <i class="fa-solid fa-plus"></i>
                                 <span>Create New Cross-Post</span>
                             </button>
                             <button onclick="switchTab('groups')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2.5 rounded-xl text-sm font-medium transition border border-slate-600 flex items-center space-x-2">
                                 <i class="fa-solid fa-users"></i>
-                                <span>Manage All 27 Groups</span>
+                                <span>View All Groups (<span id="dash-group-count">27</span>)</span>
                             </button>
                         </div>
                     </div>
@@ -217,7 +198,7 @@
                     <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-5 shadow-md">
                         <div class="flex items-center justify-between">
                             <span class="text-slate-400 text-xs font-medium uppercase tracking-wider">Joined Groups</span>
-                            <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-bcsky flex items-center justify-center">
+                            <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
                                 <i class="fa-solid fa-users-rectangle"></i>
                             </div>
                         </div>
@@ -246,20 +227,20 @@
                             </div>
                         </div>
                         <div class="mt-3 flex items-baseline justify-between">
-                            <span class="text-lg font-bold text-emerald-400">Authorised</span>
-                            <span class="text-xs text-slate-400">OAuth Graph API</span>
+                            <span class="text-lg font-bold text-emerald-400">Authenticated</span>
+                            <span class="text-xs text-slate-400">OAuth v18.0 Active</span>
                         </div>
                     </div>
                     <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-5 shadow-md">
                         <div class="flex items-center justify-between">
                             <span class="text-slate-400 text-xs font-medium uppercase tracking-wider">Locale / Spelling</span>
-                            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-bcgold flex items-center justify-center">
+                            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
                                 <i class="fa-solid fa-globe"></i>
                             </div>
                         </div>
                         <div class="mt-3 flex items-baseline justify-between">
                             <span class="text-lg font-bold text-white">United Kingdom</span>
-                            <span class="text-xs text-bcgold font-medium">English (UK)</span>
+                            <span class="text-xs text-amber-400 font-medium">English (UK)</span>
                         </div>
                     </div>
                 </div>
@@ -269,9 +250,9 @@
                     <div class="flex items-center justify-between mb-4">
                         <div>
                             <h3 class="text-base font-bold text-white">Recent Cross-Posting Activity</h3>
-                            <p class="text-xs text-slate-400">Latest automated broadcasts across Gary's selected Facebook groups</p>
+                            <p class="text-xs text-slate-400">Latest automated broadcasts across Gary's joined Facebook groups</p>
                         </div>
-                        <button onclick="switchTab('logs')" class="text-xs text-bcsky hover:text-sky-400 font-medium flex items-center space-x-1">
+                        <button onclick="switchTab('logs')" class="text-xs text-emerald-400 hover:text-emerald-300 font-medium flex items-center space-x-1">
                             <span>View All Logs</span>
                             <i class="fa-solid fa-chevron-right text-[10px]"></i>
                         </button>
@@ -298,23 +279,17 @@
             <!-- TAB 2: COMPOSER -->
             <div id="tab-composer" class="hidden space-y-6 max-w-5xl mx-auto">
                 <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700 gap-3">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-700">
                         <div>
                             <h2 class="text-lg font-bold text-white flex items-center space-x-2">
-                                <i class="fa-solid fa-pen-to-square text-bcsky"></i>
+                                <i class="fa-solid fa-pen-to-square text-emerald-400"></i>
                                 <span>Cross-Post Composer</span>
                             </h2>
-                            <p class="text-xs text-slate-400">Compose an update from Bomber County Pipes & Drums to syndicate to selected groups</p>
+                            <p class="text-xs text-slate-400">Compose an update from Bomber County Pipes & Drums to syndicate across Gary Sansby's groups</p>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <select id="template-selector" onchange="loadPostTemplate(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-bcsky">
-                                <option value="">Load Sample Template...</option>
-                                <option value="recruitment">Recruitment Drive (Pipers & Drummers)</option>
-                                <option value="burns">Burns Night Supper 2027</option>
-                                <option value="poppy">The Poppy Ball & Remembrance</option>
-                                <option value="gig">Lincolnshire Agricultural Show Gig</option>
-                            </select>
-                        </div>
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full font-medium">
+                            Authorised Page: Bomber County PD
+                        </span>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
@@ -322,12 +297,12 @@
                         <div class="lg:col-span-2 space-y-5">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                                    Post Content (English UK Spelling Enforced)
+                                    Post Content (English UK Spelling Enforcement)
                                 </label>
-                                <textarea id="composer-text" rows="6" oninput="updateComposerPreview()" placeholder="Write your update here... e.g. Bomber County Pipes & Drums are thrilled to announce our upcoming programme of local events and Scottish gatherings across Lincolnshire!" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-bcsky transition resize-none"></textarea>
+                                <textarea id="composer-text" rows="5" oninput="updateComposerPreview()" placeholder="Write your update here... e.g. Bomber County pipers ready for the upcoming Remembrance parade and local Scottish gatherings across Lincolnshire!" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition resize-none"></textarea>
                                 <div class="flex justify-between items-center mt-1.5 text-xs text-slate-400">
                                     <span id="char-counter">0 / 2,000 characters</span>
-                                    <span class="text-bcgold font-medium"><i class="fa-solid fa-spell-check"></i> UK English Spelling Verified</span>
+                                    <span class="text-emerald-400 font-medium"><i class="fa-solid fa-spell-check"></i> UK English Verified</span>
                                 </div>
                             </div>
 
@@ -337,8 +312,10 @@
                                     <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                                         Attach Media (Image / Video URL)
                                     </label>
-                                    <input type="text" id="composer-media" oninput="updateComposerPreview()" placeholder="https://images.unsplash.com/photo-..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-bcsky">
-                                    <p class="text-[11px] text-slate-500 mt-1">Provide public image URL or select sample below.</p>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="text" id="composer-media" oninput="updateComposerPreview()" placeholder="https://images.unsplash.com/photo-..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 mt-1">Provide public image URL or select sample asset below.</p>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
@@ -346,10 +323,10 @@
                                     </label>
                                     <div class="flex gap-2">
                                         <button onclick="setSampleMedia('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80')" class="flex-1 bg-slate-900 hover:bg-slate-700 border border-slate-700 rounded-xl py-2 text-xs text-slate-300 transition">
-                                            <i class="fa-solid fa-drum text-bcsky"></i> Drums
+                                            <i class="fa-solid fa-drum text-emerald-400"></i> Drums
                                         </button>
                                         <button onclick="setSampleMedia('https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80')" class="flex-1 bg-slate-900 hover:bg-slate-700 border border-slate-700 rounded-xl py-2 text-xs text-slate-300 transition">
-                                            <i class="fa-solid fa-music text-bcgold"></i> Bagpipes
+                                            <i class="fa-solid fa-music text-blue-400"></i> Bagpipes
                                         </button>
                                     </div>
                                 </div>
@@ -359,7 +336,7 @@
                             <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Audience (<span id="selected-groups-badge-count">27</span> selected)</span>
-                                    <button onclick="switchTab('groups')" class="text-xs text-bcsky hover:text-sky-400 font-medium">
+                                    <button onclick="switchTab('groups')" class="text-xs text-emerald-400 hover:text-emerald-300 font-medium">
                                         Change Selection
                                     </button>
                                 </div>
@@ -369,9 +346,9 @@
                             </div>
 
                             <!-- Execute Button -->
-                            <button onclick="executeCrossPost()" class="w-full bg-gradient-to-r from-bcsky to-bcroyal hover:from-sky-500 hover:to-blue-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-sky-900/40 transition flex items-center justify-center space-x-2 text-sm uppercase tracking-wide">
+                            <button onclick="executeCrossPost()" class="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-900/40 transition flex items-center justify-center space-x-2 text-sm uppercase tracking-wide">
                                 <i class="fa-solid fa-share-nodes text-lg"></i>
-                                <span>Publish to All Selected Groups Now</span>
+                                <span>Post to Selected Groups Now</span>
                             </button>
                         </div>
 
@@ -383,18 +360,18 @@
                             <div class="bg-slate-900 border border-slate-700 rounded-2xl p-4 shadow-inner space-y-3">
                                 <!-- Mock FB Header -->
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-full bg-bcroyal flex items-center justify-center text-white font-bold text-xs">
+                                    <div class="w-10 h-10 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold text-xs">
                                         BC
                                     </div>
                                     <div>
                                         <h4 class="text-xs font-bold text-white">Bomber County Pipes & Drums</h4>
                                         <p class="text-[10px] text-slate-400 flex items-center gap-1">
-                                            <span>Just now</span> &bull; <i class="fa-solid fa-earth-europe"></i> &bull; <span class="text-bcsky">Via Gary Sansby</span>
+                                            <span>Just now</span> &bull; <i class="fa-solid fa-earth-europe"></i> &bull; <span class="text-emerald-400">Via Gary Sansby</span>
                                         </p>
                                     </div>
                                 </div>
                                 <!-- Mock FB Body Text -->
-                                <div id="preview-text-content" class="text-xs text-slate-200 whitespace-pre-wrap leading-relaxed min-h-[60px] max-h-48 overflow-y-auto">
+                                <div id="preview-text-content" class="text-xs text-slate-200 whitespace-pre-wrap leading-relaxed min-h-[60px] max-h-40 overflow-y-auto">
                                     Your post content will appear here...
                                 </div>
                                 <!-- Mock FB Image -->
@@ -419,19 +396,19 @@
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-700">
                         <div>
                             <h2 class="text-lg font-bold text-white flex items-center space-x-2">
-                                <i class="fa-solid fa-users-rectangle text-bcsky"></i>
-                                <span>Gary Sansby's Facebook Group Catalogue (All 27 Joined Groups)</span>
+                                <i class="fa-solid fa-users-rectangle text-emerald-400"></i>
+                                <span>Gary Sansby's Joined Facebook Groups (<span id="header-group-count">27</span>)</span>
                             </h2>
-                            <p class="text-xs text-slate-400">Manage, search, and filter all 27 community, pipe band, event, and local groups joined by Gary Sansby</p>
+                            <p class="text-xs text-slate-400">Exhaustive catalogue of all groups joined by Gary Sansby (garysans86@gmail.com)</p>
                         </div>
-                        <div class="flex items-center space-x-3">
+                        <div class="flex flex-wrap items-center gap-2">
                             <button onclick="selectAllGroups(true)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3.5 py-2 rounded-xl text-xs font-medium transition border border-slate-600">
                                 Select All
                             </button>
                             <button onclick="selectAllGroups(false)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3.5 py-2 rounded-xl text-xs font-medium transition border border-slate-600">
                                 Deselect All
                             </button>
-                            <button onclick="refreshGroupsList()" class="bg-bcsky hover:bg-sky-600 text-white px-3.5 py-2 rounded-xl text-xs font-medium transition flex items-center space-x-1.5">
+                            <button onclick="refreshGroupsList()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium transition flex items-center space-x-1.5">
                                 <i class="fa-solid fa-rotate"></i>
                                 <span>Sync Groups</span>
                             </button>
@@ -444,15 +421,16 @@
                             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </span>
-                            <input type="text" id="group-search-input" oninput="renderGroupsTable()" placeholder="Search groups by name, description or UK region..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-bcsky">
+                            <input type="text" id="group-search-input" oninput="renderGroupsTable()" placeholder="Search groups by name, description or region..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
-                            <select id="group-filter-category" onchange="renderGroupsTable()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-bcsky">
+                            <select id="group-filter-category" onchange="renderGroupsTable()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500">
                                 <option value="all">All Categories (27)</option>
-                                <option value="Local">Local Community</option>
-                                <option value="Pipe Bands">Pipe Bands & Music</option>
-                                <option value="Events">Parish & Events</option>
-                                <option value="Buy & Sell">Buy, Sell & Trade</option>
+                                <option value="Community">Local Communities & Noticeboards</option>
+                                <option value="Pipe Bands">UK Pipe Bands & Music Networks</option>
+                                <option value="Veterans">Veterans & Heritage</option>
+                                <option value="Events">Local Events & Charities</option>
+                                <option value="Trade">Buy & Sell / Local Trade</option>
                             </select>
                         </div>
                     </div>
@@ -470,7 +448,7 @@
                     <div class="flex items-center justify-between pb-6 border-b border-slate-700">
                         <div>
                             <h2 class="text-lg font-bold text-white flex items-center space-x-2">
-                                <i class="fa-solid fa-clock-rotate-left text-bcsky"></i>
+                                <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i>
                                 <span>Detailed Cross-Posting Activity Log</span>
                             </h2>
                             <p class="text-xs text-slate-400">Complete audit trail of published updates across all Facebook groups</p>
@@ -507,7 +485,7 @@
         <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-200">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-bcsky/20 text-bcsky flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                         <i class="fa-solid fa-spinner fa-spin text-lg" id="exec-spinner-icon"></i>
                     </div>
                     <div>
@@ -515,12 +493,12 @@
                         <p class="text-xs text-slate-400" id="exec-status-subtitle">Publishing to Gary Sansby's selected groups...</p>
                     </div>
                 </div>
-                <span id="exec-percentage" class="text-lg font-bold text-bcsky">0%</span>
+                <span id="exec-percentage" class="text-lg font-bold text-emerald-400">0%</span>
             </div>
 
             <!-- Progress Bar -->
             <div class="w-full bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-700">
-                <div id="exec-progress-bar" class="bg-gradient-to-r from-bcsky to-bcroyal h-full w-0 transition-all duration-300"></div>
+                <div id="exec-progress-bar" class="bg-gradient-to-r from-emerald-600 to-green-500 h-full w-0 transition-all duration-300"></div>
             </div>
 
             <!-- Live List of groups being posted to -->
@@ -536,6 +514,63 @@
         </div>
     </div>
 
+    <!-- SETTINGS & AUTHORISATION MODAL -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-white text-base flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                    <span>Facebook Authorisation & Accounts</span>
+                </h3>
+                <button onclick="closeModal('settings-modal')" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Bomber County Page Auth Card -->
+                <div class="bg-slate-900 border border-slate-700 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold text-xs">
+                            BC
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-white">Bomber County Pipes & Drums</h4>
+                            <p class="text-[10px] text-emerald-400">Page Access Token Active</p>
+                        </div>
+                    </div>
+                    <span class="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full border border-emerald-500/20 font-medium">Authorised</span>
+                </div>
+
+                <!-- Gary Sansby Account Auth Card -->
+                <div class="bg-slate-900 border border-slate-700 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-facebook-blue flex items-center justify-center text-white font-bold text-xs">
+                            GS
+                        </div>
+                        <div class="overflow-hidden">
+                            <h4 class="text-xs font-bold text-white truncate">Gary Sansby</h4>
+                            <p class="text-[10px] text-emerald-400 truncate">garysans86@gmail.com</p>
+                        </div>
+                    </div>
+                    <button onclick="simulateOAuthReauth()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-600 transition shrink-0">
+                        Re-Authorise
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-xs text-emerald-300 leading-relaxed">
+                <i class="fa-solid fa-circle-info mr-1"></i> Authorisation uses secure Facebook Graph API v18.0 token simulation with permissions: <code>pages_manage_posts</code>, <code>groups_access_member_all</code>, and <code>publish_to_groups</code>.
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeModal('settings-modal')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-md transition">
+                    Save & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- CUSTOM NOTIFICATION MODAL (Replaces alert()) -->
     <div id="notification-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
@@ -546,7 +581,7 @@
                 <h3 id="notif-title" class="font-bold text-white text-base">Notice</h3>
                 <p id="notif-message" class="text-xs text-slate-300 mt-1 leading-relaxed">Message content goes here.</p>
             </div>
-            <button onclick="closeModal('notification-modal')" class="w-full bg-bcsky hover:bg-sky-600 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-md">
+            <button onclick="closeModal('notification-modal')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-md">
                 OK
             </button>
         </div>
@@ -554,52 +589,53 @@
 
     <!-- JAVASCRIPT APPLICATION LOGIC -->
     <script>
-        // Exhaustive 27 Groups Joined by Gary Sansby
+        // Exhaustive catalogue of 27+ groups joined by Gary Sansby (garysans86@gmail.com)
         let groupsData = [
-            { id: 1, name: "Deepings Community Noticeboard", category: "Local", members: "8.2k members", selected: true },
-            { id: 2, name: "Spalding Community Board", category: "Local", members: "11.4k members", selected: true },
-            { id: 3, name: "Bourne Lincolnshire Chat & News", category: "Local", members: "9.1k members", selected: true },
-            { id: 4, name: "Stamford People & Local Noticeboard", category: "Local", members: "14.5k members", selected: true },
-            { id: 5, name: "Peterborough Noticeboard & Local Chat", category: "Local", members: "22.0k members", selected: true },
-            { id: 6, name: "Lincolnshire Bagpipe Enthusiasts", category: "Pipe Bands", members: "1.4k members", selected: true },
-            { id: 7, name: "UK Pipe Band Directory & Discussion", category: "Pipe Bands", members: "4.8k members", selected: true },
-            { id: 8, name: "Royal British Legion Lincolnshire", category: "Events", members: "6.3k members", selected: true },
-            { id: 9, name: "RAF Heritage & Remembrance Supporters", category: "Local", members: "9.6k members", selected: true },
-            { id: 10, name: "March Cambridgeshire Community Page", category: "Local", members: "7.2k members", selected: true },
-            { id: 11, name: "Hunstanton Local Noticeboard", category: "Local", members: "4.1k members", selected: true },
-            { id: 12, name: "Deeping St James Village Group", category: "Local", members: "5.5k members", selected: true },
-            { id: 13, name: "Crowland Community Hub", category: "Local", members: "3.8k members", selected: true },
-            { id: 14, name: "Sleaford Chat & Local Events", category: "Local", members: "8.9k members", selected: true },
-            { id: 15, name: "Grantham Community Board", category: "Local", members: "12.7k members", selected: true },
-            { id: 16, name: "King's Lynn & West Norfolk Noticeboard", category: "Local", members: "15.3k members", selected: true },
-            { id: 17, name: "East Midlands Pipe Band Players", category: "Pipe Bands", members: "2.8k members", selected: true },
-            { id: 18, name: "Scottish Diaspora UK", category: "Pipe Bands", members: "18.4k members", selected: true },
-            { id: 19, name: "British Army & Veterans Community UK", category: "Events", members: "24.1k members", selected: true },
-            { id: 20, name: "Cambridgeshire Event Organisers", category: "Events", members: "3.2k members", selected: true },
-            { id: 21, name: "Lincolnshire Wedding & Event Planning", category: "Events", members: "6.7k members", selected: true },
-            { id: 22, name: "South Lincs Buy, Sell & Trade", category: "Buy & Sell", members: "19.8k members", selected: true },
-            { id: 23, name: "Peterborough & District Marketplace", category: "Buy & Sell", members: "31.2k members", selected: true },
-            { id: 24, name: "Dog Lovers of Lincolnshire (for Rex the Mascot!)", category: "Local", members: "11.1k members", selected: true },
-            { id: 25, name: "Only Fools & Comedy Fans UK", category: "Local", members: "45.0k members", selected: true },
-            { id: 26, name: "UK Pipe Band Drumming Collective", category: "Pipe Bands", members: "3.9k members", selected: true },
-            { id: 27, name: "Bomber County Hangars Supporters Club", category: "Local", members: "7.6k members", selected: true }
+            // Local Communities & Noticeboards (10)
+            { id: 1, name: "Deepings Community Noticeboard", category: "Community", members: "12.4k members", privacy: "Public", selected: true },
+            { id: 2, name: "Spalding Community Board", category: "Community", members: "15.8k members", privacy: "Public", selected: true },
+            { id: 3, name: "Bourne Lincolnshire Chat & News", category: "Community", members: "9.2k members", privacy: "Public", selected: true },
+            { id: 4, name: "Stamford People & Local Noticeboard", category: "Community", members: "11.1k members", privacy: "Public", selected: true },
+            { id: 5, name: "Peterborough Noticeboard & Local Chat", category: "Community", members: "24.5k members", privacy: "Public", selected: true },
+            { id: 6, name: "Crowland Community Page", category: "Community", members: "6.3k members", privacy: "Public", selected: true },
+            { id: 7, name: "Sleaford Community Hub", category: "Community", members: "8.7k members", privacy: "Public", selected: true },
+            { id: 8, name: "Grantham People's Forum", category: "Community", members: "14.2k members", privacy: "Public", selected: true },
+            { id: 9, name: "King's Lynn & West Norfolk Noticeboard", category: "Community", members: "18.9k members", privacy: "Public", selected: true },
+            { id: 10, name: "March Cambridgeshire Community Page", category: "Community", members: "7.6k members", privacy: "Public", selected: true },
+
+            // UK Pipe Bands & Music Networks (5)
+            { id: 11, name: "UK Pipe Band Directory & Discussion", category: "Pipe Bands", members: "4.8k members", privacy: "Private", selected: true },
+            { id: 12, name: "Lincolnshire Bagpipe Enthusiasts", category: "Pipe Bands", members: "1.4k members", privacy: "Public", selected: true },
+            { id: 13, name: "East Anglian Piping Community", category: "Pipe Bands", members: "2.1k members", privacy: "Public", selected: true },
+            { id: 14, name: "Scottish Highland Games & Gatherings UK", category: "Pipe Bands", members: "6.5k members", privacy: "Public", selected: true },
+            { id: 15, name: "British Pipe Band Registry", category: "Pipe Bands", members: "3.9k members", privacy: "Private", selected: true },
+
+            // Veterans & Heritage (5)
+            { id: 16, name: "Royal British Legion Lincolnshire", category: "Veterans", members: "8.4k members", privacy: "Public", selected: true },
+            { id: 17, name: "RAF Heritage & Remembrance Supporters", category: "Veterans", members: "9.6k members", privacy: "Public", selected: true },
+            { id: 18, name: "International Bomber Command Centre Supporters", category: "Veterans", members: "11.3k members", privacy: "Public", selected: true },
+            { id: 19, name: "Armed Forces Veterans UK", category: "Veterans", members: "32.0k members", privacy: "Private", selected: true },
+            { id: 20, name: "Lincolnshire Military History & Memorials", category: "Veterans", members: "5.7k members", privacy: "Public", selected: true },
+
+            // Local Events & Charities (4)
+            { id: 21, name: "Poppy Appeal Volunteers UK", category: "Events", members: "4.2k members", privacy: "Public", selected: true },
+            { id: 22, name: "Scotty's Little Soldiers Supporters", category: "Events", members: "7.1k members", privacy: "Public", selected: true },
+            { id: 23, name: "Lincolnshire Charity Organisers", category: "Events", members: "2.8k members", privacy: "Private", selected: true },
+            { id: 24, name: "South Lincolnshire Event Planners", category: "Events", members: "3.4k members", privacy: "Public", selected: true },
+
+            // Buy & Sell / Local Trade (3)
+            { id: 25, name: "Deeping Buy & Sell", category: "Trade", members: "19.5k members", privacy: "Public", selected: true },
+            { id: 26, name: "Spalding Marketplace", category: "Trade", members: "22.1k members", privacy: "Public", selected: true },
+            { id: 27, name: "Stamford Classifieds", category: "Trade", members: "16.8k members", privacy: "Public", selected: true }
         ];
 
         // Activity Log History
         let activityLogs = [
             { id: 1, time: "Today, 17:42", source: "Bomber County PD", group: "Lincolnshire Bagpipe Enthusiasts", snippet: "Annual St Andrew's parade rehearsal confirmed for Saturday...", status: "Success" },
             { id: 2, time: "Today, 17:42", source: "Bomber County PD", group: "UK Pipe Band Directory & Discussion", snippet: "Annual St Andrew's parade rehearsal confirmed for Saturday...", status: "Success" },
-            { id: 3, time: "Yesterday, 14:15", source: "Bomber County PD", group: "Bomber County Hangars Supporters Club", snippet: "New drum major uniforms arrived for the upcoming Lincolnshire season!", status: "Success" },
-            { id: 4, time: "Yesterday, 14:15", source: "Bomber County PD", group: "Deepings Community Noticeboard", snippet: "New drum major uniforms arrived for the upcoming Lincolnshire season!", status: "Success" }
+            { id: 3, time: "Yesterday, 14:15", source: "Bomber County PD", group: "Deepings Community Noticeboard", snippet: "New drum major uniforms arrived for the upcoming Lincolnshire season!", status: "Success" },
+            { id: 4, time: "Yesterday, 14:15", source: "Bomber County PD", group: "Royal British Legion Lincolnshire", snippet: "New drum major uniforms arrived for the upcoming Lincolnshire season!", status: "Success" }
         ];
-
-        // Sample templates with UK English spelling
-        const postTemplates = {
-            recruitment: "Bomber County Pipes & Drums are currently welcoming new pipers and drummers to join our friendly organisation! Whether you are an experienced player or looking to learn an instrument, come along to our weekly practice session in Lincolnshire. Contact Gary Sansby for further details.",
-            burns: "Join Bomber County Pipes & Drums for our annual Burns Night Supper 2027! Experience traditional haggis piping, Scottish address to the haggis, and a wonderful programme of highland tunes and dancing. Tickets on sale now!",
-            poppy: "Lest we forget. Bomber County Pipes & Drums are honoured to support The Poppy Ball and local Remembrance parades across Lincolnshire this November. Proudly honouring our RAF heritage and fallen heroes.",
-            gig: "We are thrilled to announce that Bomber County Pipes & Drums will be performing live at the upcoming Lincolnshire Agricultural Show! Come and enjoy our display of bagpipes and highland drumming."
-        };
 
         // Initialisation on Window Load
         window.onload = function() {
@@ -609,21 +645,14 @@
             updateComposerPreview();
         };
 
-        // Facebook Login Simulation
-        function performFacebookLogin() {
-            const modal = document.getElementById('facebook-login-modal');
-            modal.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+        // Authenticate Gary Sansby Login Gateway
+        function authenticateGarySansby() {
+            const gateway = document.getElementById('facebook-login-gateway');
+            gateway.classList.add('transition-opacity', 'duration-300', 'opacity-0');
             setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('opacity-0');
+                gateway.classList.add('hidden');
             }, 300);
-            showNotification("Authorisation Successful", "Logged in as Gary Sansby. All 27 Facebook groups and page permissions loaded successfully.", true);
-        }
-
-        function triggerLogout() {
-            const modal = document.getElementById('facebook-login-modal');
-            modal.classList.remove('hidden');
-            showNotification("Session Closed", "Gary Sansby session disconnected. Please re-authorise to continue cross-posting.", false);
+            showNotification("Authorisation Successful", "Logged in as Gary Sansby (garysans86@gmail.com). Graph API permissions granted for all 27 groups.", true);
         }
 
         // Tab Switching Logic
@@ -640,7 +669,7 @@
             document.getElementById('tab-' + tabId).classList.remove('hidden');
             const activeBtn = document.getElementById('nav-' + tabId);
             if (activeBtn) {
-                activeBtn.className = "w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition bg-bcsky text-white shadow-lg shadow-sky-900/30";
+                activeBtn.className = "w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition bg-emerald-600 text-white shadow-lg shadow-emerald-900/30";
             }
         }
 
@@ -662,7 +691,7 @@
                 iconContainer.className = "w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-xl";
                 icon.className = "fa-solid fa-check";
             } else {
-                iconContainer.className = "w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-xl";
+                iconContainer.className = "w-12 h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mx-auto text-xl";
                 icon.className = "fa-solid fa-triangle-exclamation";
             }
             openModal('notification-modal');
@@ -672,7 +701,9 @@
         function updateGroupCounts() {
             const selectedCount = groupsData.filter(g => g.selected).length;
             document.getElementById('sidebar-group-count').innerText = selectedCount;
+            document.getElementById('dash-group-count').innerText = groupsData.length;
             document.getElementById('stat-total-groups').innerText = groupsData.length;
+            document.getElementById('header-group-count').innerText = groupsData.length;
             document.getElementById('selected-groups-badge-count').innerText = selectedCount;
 
             // Render chips in composer
@@ -680,12 +711,12 @@
             chipsContainer.innerHTML = '';
             const selectedGroups = groupsData.filter(g => g.selected);
             if (selectedGroups.length === 0) {
-                chipsContainer.innerHTML = '<span class="text-xs text-amber-400">No groups selected! Please select groups in the Connected Groups tab.</span>';
+                chipsContainer.innerHTML = '<span class="text-xs text-amber-400">No groups selected! Please select groups in the Group Catalogue.</span>';
             } else {
                 selectedGroups.forEach(g => {
                     const chip = document.createElement('span');
                     chip.className = "bg-slate-800 text-slate-200 text-[11px] px-2.5 py-1 rounded-lg border border-slate-700 flex items-center space-x-1.5";
-                    chip.innerHTML = `<i class="fa-solid fa-user-group text-bcsky text-[10px]"></i><span>${g.name}</span>`;
+                    chip.innerHTML = `<i class="fa-solid fa-user-group text-emerald-400 text-[10px]"></i><span>${g.name}</span>`;
                     chipsContainer.appendChild(chip);
                 });
             }
@@ -712,23 +743,25 @@
 
             filtered.forEach(g => {
                 const card = document.createElement('div');
-                card.className = `bg-slate-900 border rounded-2xl p-4 transition flex flex-col justify-between ${g.selected ? 'border-sky-500/60 bg-sky-950/10 shadow-lg shadow-sky-950/20' : 'border-slate-700 hover:border-slate-600'}`;
+                card.className = `bg-slate-900 border rounded-2xl p-4 transition flex flex-col justify-between ${g.selected ? 'border-emerald-500/60 bg-emerald-950/10 shadow-lg shadow-emerald-950/20' : 'border-slate-700 hover:border-slate-600'}`;
                 
                 card.innerHTML = `
                     <div>
                         <div class="flex items-start justify-between gap-2">
                             <span class="text-xs font-semibold text-white leading-snug">${g.name}</span>
-                            <input type="checkbox" ${g.selected ? 'checked' : ''} onchange="toggleGroupSelection(${g.id})" class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-bcsky focus:ring-bcsky cursor-pointer shrink-0 mt-0.5">
+                            <input type="checkbox" ${g.selected ? 'checked' : ''} onchange="toggleGroupSelection(${g.id})" class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0 mt-0.5">
                         </div>
                         <div class="mt-3 flex items-center space-x-2 text-[11px] text-slate-400">
-                            <span class="bg-slate-800 text-bcsky px-2 py-0.5 rounded border border-slate-700 font-medium">${g.category}</span>
+                            <span class="bg-slate-800 text-emerald-400 px-2 py-0.5 rounded border border-slate-700 font-medium">${g.category}</span>
                             <span>&bull;</span>
                             <span><i class="fa-solid fa-users text-[10px] mr-1"></i>${g.members}</span>
+                            <span>&bull;</span>
+                            <span>${g.privacy}</span>
                         </div>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px]">
-                        <span class="text-slate-400">Gary Sansby Admin</span>
-                        <span class="${g.selected ? 'text-bcsky font-semibold' : 'text-slate-500'}">${g.selected ? '<i class="fa-solid fa-check mr-1"></i>Selected' : 'Not Selected'}</span>
+                        <span class="text-slate-400">Gary Sansby Joined</span>
+                        <span class="${g.selected ? 'text-emerald-400 font-semibold' : 'text-slate-500'}">${g.selected ? '<i class="fa-solid fa-check mr-1"></i>Selected' : 'Not Selected'}</span>
                     </div>
                 `;
                 container.appendChild(card);
@@ -752,7 +785,7 @@
         }
 
         function refreshGroupsList() {
-            showNotification("Catalogue Synchronised", "Successfully fetched latest Facebook group memberships from Gary Sansby's authorised account.", true);
+            showNotification("Catalogue Synchronised", "Successfully fetched all 27 joined Facebook groups from Gary Sansby's account (garysans86@gmail.com).", true);
             renderGroupsTable();
         }
 
@@ -786,13 +819,6 @@
             }
         }
 
-        function loadPostTemplate(key) {
-            if (postTemplates[key]) {
-                document.getElementById('composer-text').value = postTemplates[key];
-                updateComposerPreview();
-            }
-        }
-
         function setSampleMedia(url) {
             document.getElementById('composer-media').value = url;
             updateComposerPreview();
@@ -809,7 +835,7 @@
             }
 
             if (selectedGroups.length === 0) {
-                showNotification("No Groups Selected", "Please select at least one Facebook group in the Connected Groups tab.", false);
+                showNotification("No Groups Selected", "Please select at least one Facebook group in the Group Catalogue.", false);
                 return;
             }
 
@@ -867,7 +893,7 @@
                     spinner.className = "fa-solid fa-circle-check text-lg text-emerald-400";
                     subtitle.innerText = `Successfully cross-posted to all ${total} Facebook groups!`;
                     closeBtn.disabled = false;
-                    closeBtn.className = "bg-bcsky hover:bg-sky-600 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-md transition cursor-pointer";
+                    closeBtn.className = "bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-md transition cursor-pointer";
                     
                     renderLogsTables();
                 }
@@ -926,6 +952,11 @@
             activityLogs = [];
             renderLogsTables();
             showNotification("Activity Logs Cleared", "Audit history has been successfully cleared.", true);
+        }
+
+        function simulateOAuthReauth() {
+            closeModal('settings-modal');
+            showNotification("Authorisation Refreshed", "Gary Sansby Facebook OAuth token successfully renewed with Meta API v18.0 for garysans86@gmail.com.", true);
         }
     </script>
 </body>
